@@ -24,7 +24,12 @@ function App() {
   };
 
   return (
-    <div className="app-container">
+    <>
+      <div className="aurora-bg">
+        <div className="aurora-1"></div>
+        <div className="aurora-2"></div>
+      </div>
+      <div className="app-container">
       {currentPage === 'login' && (
         <Login 
           onLogin={handleLogin} 
@@ -64,6 +69,7 @@ function App() {
         </>
       )}
     </div>
+    </>
   )
 }
 

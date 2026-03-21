@@ -1,10 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
 :root {
-  --primary-color: #6366f1;
-  --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
-  --container-bg: rgba(255, 255, 255, 0.05);
-  --container-border: rgba(255, 255, 255, 0.1);
-  --text-primary: #f8fafc;
-  --text-secondary: #cbd5e1;
+  --bg-color: #09090b; /* Zinc 950 */
+  --container-bg: rgba(24, 24, 27, 0.4); /* Zinc 900 frosted */
+  --border-color: rgba(255, 255, 255, 0.08);
+  --border-hover: rgba(255, 255, 255, 0.15);
+  --text-primary: #fafafa;
+  --text-secondary: #a1a1aa; /* Zinc 400 */
+  --accent-primary: #8b5cf6; /* Violet */
+  --accent-secondary: #3b82f6; /* Blue */
+  --glow-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
 }
 
 * {
@@ -14,11 +19,71 @@
 }
 
 body {
-  font-family: 'Inter', sans-serif;
-  background: var(--bg-gradient);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background-color: var(--bg-color);
   color: var(--text-primary);
   min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
+  overflow: hidden;
+  position: relative;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Beautiful, subtle, elegant Aurora Background */
+.aurora-bg {
+  position: absolute;
+  top: 0; left: 0; width: 100vw; height: 100vh;
+  z-index: -1;
+  overflow: hidden;
+  background: var(--bg-color);
+}
+
+.aurora-1, .aurora-2 {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(120px);
+  opacity: 0.5;
+  animation: floatAurora 25s ease-in-out infinite alternate;
+}
+
+.aurora-1 {
+  width: 60vw; height: 30vw;
+  background: #6d28d9; /* Deep violet */
+  top: -10%; left: -10%;
+  transform: rotate(-15deg);
+}
+
+.aurora-2 {
+  width: 50vw; height: 40vw;
+  background: #1d4ed8; /* Deep blue */
+  bottom: -10%; right: -10%;
+  animation-duration: 30s;
+  animation-direction: alternate-reverse;
+}
+
+@keyframes floatAurora {
+  0% { transform: translate(0, 0) scale(1) rotate(0deg); }
+  50% { transform: translate(10vw, 5vh) scale(1.1) rotate(10deg); }
+  100% { transform: translate(-5vw, 10vh) scale(0.9) rotate(-5deg); }
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+::selection {
+  background: rgba(139, 92, 246, 0.4);
+  color: #fff;
 }
