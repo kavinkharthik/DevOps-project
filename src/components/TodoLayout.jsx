@@ -31,6 +31,14 @@ const TodoLayout = () => {
     setTasks(tasks.map(t => t.id === id ? { ...t, completed: !t.completed } : t));
   };
 
+  const toggleStar = (id) => {
+    setTasks(tasks.map(t => t.id === id ? { ...t, starred: !t.starred } : t));
+  };
+
+  const editTask = (id, newText) => {
+    setTasks(tasks.map(t => t.id === id ? { ...t, text: newText } : t));
+  };
+
   const deleteTask = (id) => {
     setTasks(tasks.filter(t => t.id !== id));
   };
@@ -67,7 +75,7 @@ const TodoLayout = () => {
         )}
       </div>
 
-      <TodoList tasks={filteredTasks} toggleTask={toggleTask} deleteTask={deleteTask} filterType={filter} />
+      <TodoList tasks={filteredTasks} toggleTask={toggleTask} toggleStar={toggleStar} editTask={editTask} deleteTask={deleteTask} filterType={filter} />
     </div>
   );
 };

@@ -2,11 +2,11 @@ import React from 'react';
 import TodoItem from './TodoItem';
 import './TodoList.css';
 
-const TodoList = ({ tasks, toggleTask, deleteTask, filterType }) => {
+const TodoList = ({ tasks, toggleTask, toggleStar, editTask, deleteTask, filterType }) => {
   if (tasks.length === 0) {
     let emptyEmoji = '🎉';
     let emptyMessage = 'All caught up!';
-    
+
     if (filterType === 'active') {
       emptyEmoji = '☕';
       emptyMessage = 'No active tasks. Take a break!';
@@ -26,11 +26,13 @@ const TodoList = ({ tasks, toggleTask, deleteTask, filterType }) => {
   return (
     <div className="todo-list">
       {tasks.map(task => (
-        <TodoItem 
-          key={task.id} 
-          task={task} 
-          toggleTask={toggleTask} 
-          deleteTask={deleteTask} 
+        <TodoItem
+          key={task.id}
+          task={task}
+          toggleTask={toggleTask}
+          toggleStar={toggleStar}
+          editTask={editTask}
+          deleteTask={deleteTask}
         />
       ))}
     </div>
