@@ -4,10 +4,12 @@ import './TodoItem.css';
 const TodoItem = ({ task, toggleTask, toggleStar, editTask, deleteTask }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editText, setEditText] = useState(task.text);
+  const [editPriority, setEditPriority] = useState(task.priority || 'low');
+  const [editDueDate, setEditDueDate] = useState(task.dueDate || '');
 
   const handleEditSubmit = () => {
     if (editText.trim()) {
-      editTask(task.id, editText);
+      editTask(task.id, editText, editPriority, editDueDate);
     }
     setIsEditing(false);
   };
@@ -15,6 +17,14 @@ const TodoItem = ({ task, toggleTask, toggleStar, editTask, deleteTask }) => {
   const handleKeyDown = (e) => {
     if (e.key === 'Enter') handleEditSubmit();
   };
+
+  const priorityColors = {
+    low: '#10b981', // green
+    medium: '#f59e0b', // yellow
+    high: '#ef4444' // red
+  };
+
+  const priorityColor = priorityColors[task.priority] || priorityColors.low;
 
   return (
     <div className={`todo-item ${task.completed ? 'completed' : ''}`}>
@@ -24,7 +34,7 @@ const TodoItem = ({ task, toggleTask, toggleStar, editTask, deleteTask }) => {
           checked={task.completed}
           onChange={() => toggleTask(task.id)}
         />
-        <span className="checkmark">
+        <span className="checkmark" style={{ borderColor: task.completed ? '' : priorityColor }}>
           {task.completed && (
             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7"></path>
@@ -32,18 +42,55 @@ const TodoItem = ({ task, toggleTask, toggleStar, editTask, deleteTask }) => {
           )}
         </span>
       </label>
-      {isEditing ? (
-        <input 
-          autoFocus
-          className="edit-input"
-          value={editText}
-          onChange={(e) => setEditText(e.target.value)}
-          onBlur={handleEditSubmit}
-          onKeyDown={handleKeyDown}
-        />
-      ) : (
-        <span className="task-text" onDoubleClick={() => setIsEditing(true)}>{task.text}</span>
-      )}
+      
+      <div className="task-content">
+        {isEditing ? (
+          <div className="edit-mode">
+            <input 
+              autoFocus
+              className="edit-input"
+              value={editText}
+              onChange={(e) => setEditText(e.target.value)}
+              onKeyDown={handleKeyDown}
+            />
+            <div className="edit-controls">
+              <select 
+                value={editPriority} 
+                onChange={(e) => setEditPriority(e.target.value)}
+                className="edit-select"
+              >
+                <option value="low">Low</option>
+                <option value="medium">Medium</option>
+                <option value="high">High</option>
+              </select>
+              <input 
+                type="date" 
+                value={editDueDate} 
+                onChange={(e) => setEditDueDate(e.target.value)}
+                className="edit-date"
+              />
+              <button className="save-btn" onClick={handleEditSubmit}>Save</button>
+            </div>
+          </div>
+        ) : (
+          <div className="task-info" onDoubleClick={() => setIsEditing(true)}>
+            <span className="task-text">{task.text}</span>
+            <div className="task-meta">
+              <span className="priority-badge" style={{ backgroundColor: `${priorityColor}20`, color: priorityColor }}>
+                {task.priority ? task.priority.charAt(0).toUpperCase() + task.priority.slice(1) : 'Low'}
+              </span>
+              {task.dueDate && (
+                <span className="due-date-badge">
+                  <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style={{ width: '12px', height: '12px', marginRight: '4px' }}>
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                  </svg>
+                  {new Date(task.dueDate).toLocaleDateString()}
+                </span>
+              )}
+            </div>
+          </div>
+        )}
+      </div>
       <div className={`task-actions ${task.starred ? 'has-star' : ''}`}>
         <button 
           className={`action-btn star-btn ${task.starred ? 'starred' : ''}`} 

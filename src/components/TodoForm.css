@@ -7,7 +7,7 @@
 }
 
 .todo-input {
-  flex: 1;
+  width: 100%;
   padding: 1.15rem 1.5rem;
   border-radius: 16px;
   border: 1px solid rgba(255, 255, 255, 0.1);
@@ -18,6 +18,43 @@
   outline: none;
   font-family: inherit;
   box-shadow: inset 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.input-group {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-controls {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.todo-select, .todo-date {
+  padding: 0.75rem 1.2rem;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.4);
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  outline: none;
+  font-family: inherit;
+  cursor: pointer;
+  flex: 1;
+}
+
+.todo-select:focus, .todo-date:focus {
+  border-color: rgba(139, 92, 246, 0.6);
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.todo-date::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+  opacity: 0.5;
+  cursor: pointer;
 }
 
 .todo-input:focus {
