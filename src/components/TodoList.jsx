@@ -1,4 +1,5 @@
 import React from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import TodoItem from './TodoItem';
 import './TodoList.css';
 
@@ -16,25 +17,39 @@ const TodoList = ({ tasks, toggleTask, toggleStar, editTask, deleteTask, filterT
     }
 
     return (
-      <div className="empty-state">
+      <motion.div 
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="empty-state"
+      >
         <div className="empty-emoji">{emptyEmoji}</div>
         <span>{emptyMessage}</span>
-      </div>
+      </motion.div>
     );
   }
 
   return (
     <div className="todo-list">
-      {tasks.map(task => (
-        <TodoItem
-          key={task.id}
-          task={task}
-          toggleTask={toggleTask}
-          toggleStar={toggleStar}
-          editTask={editTask}
-          deleteTask={deleteTask}
-        />
-      ))}
+      <AnimatePresence mode="popLayout">
+        {tasks.map(task => (
+          <motion.div 
+            key={task.id}
+            layout
+            initial={{ opacity: 0, scale: 0.9, y: 10 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.9, x: -20 }}
+            transition={{ duration: 0.2 }}
+          >
+            <TodoItem
+              task={task}
+              toggleTask={toggleTask}
+              toggleStar={toggleStar}
+              editTask={editTask}
+              deleteTask={deleteTask}
+            />
+          </motion.div>
+        ))}
+      </AnimatePresence>
     </div>
   );
 };

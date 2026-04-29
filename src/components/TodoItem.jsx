@@ -6,10 +6,11 @@ const TodoItem = ({ task, toggleTask, toggleStar, editTask, deleteTask }) => {
   const [editText, setEditText] = useState(task.text);
   const [editPriority, setEditPriority] = useState(task.priority || 'low');
   const [editDueDate, setEditDueDate] = useState(task.dueDate || '');
+  const [editCategory, setEditCategory] = useState(task.category || 'Personal');
 
   const handleEditSubmit = () => {
     if (editText.trim()) {
-      editTask(task.id, editText, editPriority, editDueDate);
+      editTask(task.id, editText, editPriority, editDueDate, editCategory);
     }
     setIsEditing(false);
   };
@@ -63,6 +64,17 @@ const TodoItem = ({ task, toggleTask, toggleStar, editTask, deleteTask }) => {
                 <option value="medium">Medium</option>
                 <option value="high">High</option>
               </select>
+              <select 
+                value={editCategory} 
+                onChange={(e) => setEditCategory(e.target.value)}
+                className="edit-select"
+              >
+                <option value="Personal">Personal</option>
+                <option value="Work">Work</option>
+                <option value="Study">Study</option>
+                <option value="Health">Health</option>
+                <option value="Other">Other</option>
+              </select>
               <input 
                 type="date" 
                 value={editDueDate} 
@@ -78,6 +90,9 @@ const TodoItem = ({ task, toggleTask, toggleStar, editTask, deleteTask }) => {
             <div className="task-meta">
               <span className="priority-badge" style={{ backgroundColor: `${priorityColor}20`, color: priorityColor }}>
                 {task.priority ? task.priority.charAt(0).toUpperCase() + task.priority.slice(1) : 'Low'}
+              </span>
+              <span className="category-badge" style={{ backgroundColor: '#3b82f620', color: '#60a5fa', padding: '2px 8px', borderRadius: '12px', fontSize: '0.75rem', fontWeight: '500', marginLeft: '4px' }}>
+                {task.category || 'Personal'}
               </span>
               {task.dueDate && (
                 <span className="due-date-badge">

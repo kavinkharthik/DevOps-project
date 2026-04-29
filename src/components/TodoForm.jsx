@@ -5,14 +5,16 @@ const TodoForm = ({ addTask }) => {
   const [value, setValue] = useState('');
   const [priority, setPriority] = useState('low');
   const [dueDate, setDueDate] = useState('');
+  const [category, setCategory] = useState('Personal');
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!value.trim()) return;
-    addTask(value.trim(), priority, dueDate);
+    addTask(value.trim(), priority, dueDate, category);
     setValue('');
     setPriority('low');
     setDueDate('');
+    setCategory('Personal');
   };
 
   return (
@@ -34,6 +36,17 @@ const TodoForm = ({ addTask }) => {
             <option value="low">Low Priority</option>
             <option value="medium">Medium Priority</option>
             <option value="high">High Priority</option>
+          </select>
+          <select 
+            className="todo-select"
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+          >
+            <option value="Personal">Personal</option>
+            <option value="Work">Work</option>
+            <option value="Study">Study</option>
+            <option value="Health">Health</option>
+            <option value="Other">Other</option>
           </select>
           <input 
             type="date" 

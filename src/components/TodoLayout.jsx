@@ -19,13 +19,14 @@ const TodoLayout = () => {
   const [filter, setFilter] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState('default');
+  const [filterCategory, setFilterCategory] = useState('All');
 
   useEffect(() => {
     localStorage.setItem('todo_tasks', JSON.stringify(tasks));
   }, [tasks]);
 
-  const addTask = (text, priority = 'low', dueDate = '') => {
-    const newTask = { id: Date.now(), text, completed: false, priority, dueDate };
+  const addTask = (text, priority = 'low', dueDate = '', category = 'Personal') => {
+    const newTask = { id: Date.now(), text, completed: false, priority, dueDate, category };
     setTasks([newTask, ...tasks]);
   };
 
@@ -37,8 +38,8 @@ const TodoLayout = () => {
     setTasks(tasks.map(t => t.id === id ? { ...t, starred: !t.starred } : t));
   };
 
-  const editTask = (id, newText, newPriority, newDueDate) => {
-    setTasks(tasks.map(t => t.id === id ? { ...t, text: newText, priority: newPriority, dueDate: newDueDate } : t));
+  const editTask = (id, newText, newPriority, newDueDate, newCategory) => {
+    setTasks(tasks.map(t => t.id === id ? { ...t, text: newText, priority: newPriority, dueDate: newDueDate, category: newCategory } : t));
   };
 
   const deleteTask = (id) => {
@@ -55,11 +56,16 @@ const TodoLayout = () => {
   );
 
   // 2. Status filter
-  const filteredTasks = searchedTasks.filter(task => {
+  let filteredTasks = searchedTasks.filter(task => {
     if (filter === 'active') return !task.completed;
     if (filter === 'completed') return task.completed;
     return true; // 'all'
   });
+
+  // 2.5 Category filter
+  if (filterCategory !== 'All') {
+    filteredTasks = filteredTasks.filter(task => task.category === filterCategory);
+  }
 
   // 3. Sort
   const sortedTasks = [...filteredTasks].sort((a, b) => {
@@ -79,12 +85,25 @@ const TodoLayout = () => {
   });
 
   const pendingCount = tasks.filter(t => !t.completed).length;
+  const completedCount = tasks.length - pendingCount;
+  const progress = tasks.length > 0 ? Math.round((completedCount / tasks.length) * 100) : 0;
 
   return (
     <div className="todo-layout">
       <header className="todo-header">
         <h1 className="title">Tasks</h1>
-        <p className="subtitle">You have {pendingCount} pending task{pendingCount !== 1 ? 's' : ''}</p>
+        <div className="stats-container">
+          <p className="subtitle">You have {pendingCount} pending task{pendingCount !== 1 ? 's' : ''}</p>
+          <div className="progress-wrapper">
+            <div className="progress-text">{progress}% Complete</div>
+            <div className="progress-track">
+              <div 
+                className="progress-fill" 
+                style={{ width: `${progress}%` }}
+              ></div>
+            </div>
+          </div>
+        </div>
       </header>
       
       <div className="toolbar">
@@ -99,16 +118,30 @@ const TodoLayout = () => {
             onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
-        <select 
-          className="sort-select"
-          value={sortBy}
-          onChange={(e) => setSortBy(e.target.value)}
-        >
-          <option value="default">Sort by Default</option>
-          <option value="priority">Sort by Priority</option>
-          <option value="date-asc">Sort by Due Date</option>
-          <option value="name">Sort Alphabetically</option>
-        </select>
+        <div className="filter-selects">
+          <select 
+            className="sort-select"
+            value={filterCategory}
+            onChange={(e) => setFilterCategory(e.target.value)}
+          >
+            <option value="All">All Categories</option>
+            <option value="Personal">Personal</option>
+            <option value="Work">Work</option>
+            <option value="Study">Study</option>
+            <option value="Health">Health</option>
+            <option value="Other">Other</option>
+          </select>
+          <select 
+            className="sort-select"
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value)}
+          >
+            <option value="default">Sort by Default</option>
+            <option value="priority">Sort by Priority</option>
+            <option value="date-asc">Sort by Due Date</option>
+            <option value="name">Sort Alphabetically</option>
+          </select>
+        </div>
       </div>
 
       <TodoForm addTask={addTask} />
